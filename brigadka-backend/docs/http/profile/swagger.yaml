@@ -1,0 +1,345 @@
+basePath: /api
+definitions:
+  github_com_bulatminnakhmetov_brigadka-backend_internal_service_profile.Media:
+    properties:
+      id:
+        type: integer
+      thumbnail_url:
+        type: string
+      url:
+        type: string
+    type: object
+  github_com_bulatminnakhmetov_brigadka-backend_internal_service_profile.Profile:
+    properties:
+      avatar:
+        $ref: '#/definitions/github_com_bulatminnakhmetov_brigadka-backend_internal_service_profile.Media'
+      bio:
+        type: string
+      birthday:
+        type: string
+      city_id:
+        type: integer
+      created_at:
+        type: string
+      full_name:
+        type: string
+      gender:
+        type: string
+      goal:
+        type: string
+      improv_styles:
+        items:
+          type: string
+        type: array
+      looking_for_team:
+        type: boolean
+      user_id:
+        type: integer
+      videos:
+        items:
+          $ref: '#/definitions/github_com_bulatminnakhmetov_brigadka-backend_internal_service_profile.Media'
+        type: array
+    type: object
+  github_com_bulatminnakhmetov_brigadka-backend_internal_service_profile.ProfileCreateRequest:
+    properties:
+      avatar:
+        type: integer
+      bio:
+        type: string
+      birthday:
+        type: string
+      city_id:
+        type: integer
+      full_name:
+        type: string
+      gender:
+        type: string
+      goal:
+        type: string
+      improv_styles:
+        items:
+          type: string
+        type: array
+      looking_for_team:
+        type: boolean
+      user_id:
+        type: integer
+      videos:
+        items:
+          type: integer
+        type: array
+    required:
+    - full_name
+    - user_id
+    type: object
+  github_com_bulatminnakhmetov_brigadka-backend_internal_service_profile.ProfileUpdateRequest:
+    properties:
+      avatar:
+        type: integer
+      bio:
+        type: string
+      birthday:
+        type: string
+      city_id:
+        type: integer
+      full_name:
+        type: string
+      gender:
+        type: string
+      goal:
+        type: string
+      improv_styles:
+        items:
+          type: string
+        type: array
+      looking_for_team:
+        type: boolean
+      videos:
+        items:
+          type: integer
+        type: array
+    type: object
+  internal_handler_profile.Date:
+    properties:
+      time.Time:
+        type: string
+    type: object
+  internal_handler_profile.ProfileResponse:
+    properties:
+      avatar:
+        $ref: '#/definitions/github_com_bulatminnakhmetov_brigadka-backend_internal_service_profile.Media'
+      bio:
+        type: string
+      birthday:
+        $ref: '#/definitions/internal_handler_profile.Date'
+      city_id:
+        type: integer
+      created_at:
+        type: string
+      full_name:
+        type: string
+      gender:
+        type: string
+      goal:
+        type: string
+      improv_styles:
+        items:
+          type: string
+        type: array
+      looking_for_team:
+        type: boolean
+      user_id:
+        type: integer
+      videos:
+        items:
+          $ref: '#/definitions/github_com_bulatminnakhmetov_brigadka-backend_internal_service_profile.Media'
+        type: array
+    type: object
+  internal_handler_profile.SearchRequest:
+    properties:
+      age_max:
+        type: integer
+      age_min:
+        type: integer
+      city_id:
+        type: integer
+      created_after:
+        type: string
+      full_name:
+        type: string
+      genders:
+        items:
+          type: string
+        type: array
+      goals:
+        items:
+          type: string
+        type: array
+      has_avatar:
+        type: boolean
+      has_video:
+        type: boolean
+      improv_styles:
+        items:
+          type: string
+        type: array
+      looking_for_team:
+        type: boolean
+      page:
+        type: integer
+      page_size:
+        type: integer
+    type: object
+  internal_handler_profile.SearchResponse:
+    properties:
+      page:
+        type: integer
+      page_size:
+        type: integer
+      profiles:
+        items:
+          $ref: '#/definitions/internal_handler_profile.ProfileResponse'
+        type: array
+      total_count:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@brigadka.com
+    name: API Support
+  description: API для сервиса Brigadka
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Brigadka API
+  version: "1.0"
+paths:
+  /profiles:
+    patch:
+      consumes:
+      - application/json
+      description: Updates an existing user profile (partial update)
+      parameters:
+      - description: Profile update data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_bulatminnakhmetov_brigadka-backend_internal_service_profile.ProfileUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_bulatminnakhmetov_brigadka-backend_internal_service_profile.Profile'
+        "400":
+          description: Invalid request body
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "404":
+          description: Profile not found
+          schema:
+            type: string
+        "500":
+          description: Server error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Update Profile
+      tags:
+      - profile
+    post:
+      consumes:
+      - application/json
+      description: Creates a new user profile
+      parameters:
+      - description: Profile data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_bulatminnakhmetov_brigadka-backend_internal_service_profile.ProfileCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_bulatminnakhmetov_brigadka-backend_internal_service_profile.Profile'
+        "400":
+          description: Invalid request body
+          schema:
+            type: string
+        "404":
+          description: User not found
+          schema:
+            type: string
+        "409":
+          description: Profile already exists for this user
+          schema:
+            type: string
+        "500":
+          description: Server error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Create Profile
+      tags:
+      - profile
+  /profiles/{userID}:
+    get:
+      description: Retrieves a user profile by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: userID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler_profile.ProfileResponse'
+        "400":
+          description: Invalid user ID
+          schema:
+            type: string
+        "404":
+          description: Profile not found
+          schema:
+            type: string
+        "500":
+          description: Server error
+          schema:
+            type: string
+      summary: Get Profile
+      tags:
+      - profile
+  /profiles/search:
+    post:
+      consumes:
+      - application/json
+      description: Search for profiles with various filters
+      parameters:
+      - description: Search filters
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handler_profile.SearchRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler_profile.SearchResponse'
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "500":
+          description: Server error
+          schema:
+            type: string
+      summary: Search Profiles
+      tags:
+      - profile
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
