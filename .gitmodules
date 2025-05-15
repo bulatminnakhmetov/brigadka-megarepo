@@ -1,6 +1,0 @@
-[submodule "brigadka-backend"]
-	path = brigadka-backend
-	url = https://github.com/bulatminnakhmetov/brigadka-backend
-[submodule "brigadka-client"]
-	path = brigadka-client
-	url = https://github.com/bulatminnakhmetov/brigadka
